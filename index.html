@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Memória Mágica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <!-- Tela de Carregamento Inicial -->
+    <div id="initial-loading" class="screen">
+        <div class="loading-container">
+            <div class="magic-spinner"></div>
+            <h1 class="loading-title">Carregando Jogo da Memória</h1>
+            <div class="magic-progress">
+                <div id="init-load-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Principal -->
+    <div id="main-menu" class="screen hidden">
+        <div class="main-container">
+            <h1 class="game-title pulse">Jogo da<br>Memória Mágica</h1>
+            <div class="menu-buttons">
+                <button id="start-btn" class="btn-magic btn-start">Começar Jogo</button>
+                <button id="options-btn" class="btn-magic btn-options">Opções</button>
+                <button id="credits-btn" class="btn-magic btn-credits">Créditos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Jogo -->
+    <div id="game-screen" class="screen hidden">
+        <div class="game-container">
+            <div class="game-header">
+                <div class="game-info">
+                    <div class="info-item">
+                        <i class="fas fa-trophy"></i>
+                        <span id="level-display">Nível: Normal</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-star"></i>
+                        <span id="score-display">Pontos: 0</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-flag"></i>
+                        <span id="stage-display">Fase: 1</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="time-display">04:00</span>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="game-board-container">
+                <div id="game-board" class="game-board"></div>
+            </div>
+            <button id="back-btn" class="btn-magic btn-back">Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <!-- Tela de Game Over -->
+    <div id="game-over-screen" class="screen hidden">
+        <div class="end-game-container">
+            <i class="fas fa-skull skull-icon"></i>
+            <h1 class="end-title">Game Over</h1>
+            <div class="end-stats">
+                <p><i class="fas fa-trophy"></i> Nível: <span id="end-level">Normal</span></p>
+                <p><i class="fas fa-star"></i> Pontuação: <span id="end-score">0</span></p>
+                <p><i class="fas fa-flag"></i> Fase alcançada: <span id="end-stage">1</span></p>
+            </div>
+            <div class="end-buttons">
+                <button id="try-again-btn" class="btn-magic btn-try-again">Tentar Novamente</button>
+                <button id="back-to-menu-btn" class="btn-magic btn-back-to-menu">Voltar ao Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Vitória -->
+    <div id="win-screen" class="screen hidden">
+        <div class="end-game-container">
+            <i class="fas fa-trophy trophy-icon"></i>
+            <h1 class="end-title">Parabéns!</h1>
+            <div class="end-stats">
+                <p><i class="fas fa-trophy"></i> Nível concluído: <span id="win-level">Normal</span></p>
+                <p><i class="fas fa-star"></i> Pontuação total: <span id="win-score">0</span></p>
+                <p><i class="fas fa-level-up-alt"></i> Próximo nível: <span id="next-level">Médio</span></p>
+            </div>
+            <div class="end-buttons">
+                <button id="next-level-btn" class="btn-magic btn-next-level">Próximo Nível</button>
+                <button id="back-to-menu-win-btn" class="btn-magic btn-back-to-menu">Voltar ao Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Opções -->
+    <div class="modal fade magic-modal" id="optionsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-cog me-2"></i>Opções do Jogo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="option-section">
+                        <h6><i class="fas fa-sliders-h me-2"></i>Dificuldade</h6>
+                        <div class="difficulty-options">
+                            <button type="button" class="difficulty-btn active" data-difficulty="easy">
+                                <i class="fas fa-baby"></i> Fácil
+                            </button>
+                            <button type="button" class="difficulty-btn" data-difficulty="normal">
+                                <i class="fas fa-user"></i> Normal
+                            </button>
+                            <button type="button" class="difficulty-btn" data-difficulty="medium">
+                                <i class="fas fa-running"></i> Médio
+                            </button>
+                            <button type="button" class="difficulty-btn" data-difficulty="hard">
+                                <i class="fas fa-skull"></i> Difícil
+                            </button>
+                        </div>
+                    </div>
+                    <div class="option-section">
+                        <h6><i class="fas fa-volume-up me-2"></i>Áudio</h6>
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="soundToggle" checked>
+                            <label class="form-check-label" for="soundToggle">Efeitos Sonoros</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="musicToggle" checked>
+                            <label class="form-check-label" for="musicToggle">Música de Fundo</label>
+                        </div>
+                    </div>
+                    <div class="option-section">
+                        <h6><i class="fas fa-magic me-2"></i>Efeitos Visuais</h6>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="animationsToggle" checked>
+                            <label class="form-check-label" for="animationsToggle">Animações</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveOptions">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Créditos -->
+    <div class="modal fade magic-modal" id="creditsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-info-circle me-2"></i>Créditos</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body credits-content">
+                    <div class="credit-item">
+                        <i class="fas fa-code"></i>
+                        <h6>Desenvolvimento</h6>
+                        <p>Jogo desenvolvido com HTML, CSS e JavaScript</p>
+                    </div>
+                    <div class="credit-item">
+                        <i class="fas fa-palette"></i>
+                        <h6>Design</h6>
+                        <p>Interface moderna com efeitos visuais impressionantes</p>
+                    </div>
+                    <div class="credit-item">
+                        <i class="fas fa-music"></i>
+                        <h6>Sons</h6>
+                        <p>Efeitos sonoros para melhorar a experiência</p>
+                    </div>
+                    <div class="credit-item">
+                        <i class="fas fa-icons"></i>
+                        <h6>Ícones</h6>
+                        <p>Font Awesome para os ícones do jogo</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/game.js"></script>
+</body>
+</html>
